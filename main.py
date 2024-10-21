@@ -10,8 +10,8 @@ date_of_program_change = "21.10.2024"
 
 def main(page: ft.Page):
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
-    page.window.width = 650 # Ширина
-    page.window.height = 550 # Высота
+    page.window.width = 650  # Ширина
+    page.window.height = 550  # Высота
     page.window.resizable = False
     logger.info(f"Program version: {program_version}. Date of change: {date_of_program_change}")
 
@@ -50,6 +50,9 @@ def main(page: ft.Page):
                               ft.Row([ft.ElevatedButton(width=615, height=30, text="Отправка жалоб",
                                                         on_click=lambda _: page.go("/submitting_complaints")),
                                       ]),
+                              ft.Row([ft.ElevatedButton(width=615, height=30, text="Документация",
+                                                        on_click=lambda _: page.go("/documentation")),
+                                      ]),
 
                           ]), ]))
         # ______________________________________________________________________________________________________________
@@ -66,6 +69,12 @@ def main(page: ft.Page):
                 logger.exception(f"Ошибка: {e}")
 
         elif page.route == "/submitting_complaints":  # Отправка жалоб
+            try:
+                pass
+            except Exception as e:
+                logger.exception(f"Ошибка: {e}")
+
+        elif page.route == "/documentation":  # ДокумЫЫЫентация
             try:
                 pass
             except Exception as e:
