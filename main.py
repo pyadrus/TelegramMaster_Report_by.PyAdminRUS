@@ -11,6 +11,7 @@ program_version = "0.0.1"
 date_of_program_change = "21.10.2024"
 
 line_width = ConfigReader().get_line_width_button() # Ширина кнопки
+height_button = ConfigReader().get_line_width_button() # Высота кнопки
 
 def main(page: ft.Page):
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
@@ -44,17 +45,17 @@ def main(page: ft.Page):
                                                      ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
                                                      url="https://t.me/master_tg_d", ), ], ),
                           ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Подключение аккаунтов",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Подключение аккаунтов",
                                                         on_click=lambda _: page.go("/connecting_accounts")),
                                       ]),
-                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Настройки",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Настройки",
                                                         on_click=lambda _: page.go("/settings")),
                                       ]),
 
-                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Отправка жалоб",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Отправка жалоб",
                                                         on_click=lambda _: page.go("/submitting_complaints")),
                                       ]),
-                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Документация",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Документация",
                                                         on_click=lambda _: page.go("/documentation")),
                                       ]),
 
