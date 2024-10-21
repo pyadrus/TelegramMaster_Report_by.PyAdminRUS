@@ -1,16 +1,20 @@
 import flet as ft
 from loguru import logger
 
+from config import ConfigReader
+from gui_menu import account_connection_menu
+
 logger.add("user_settings/log/log.log", rotation="2 MB", compression="zip")  # Логирование программы
 
 project_name = "TelegramMaster_Report_by.PyAdminRUS"
 program_version = "0.0.1"
 date_of_program_change = "21.10.2024"
 
+line_width = ConfigReader().get_line_width_button() # Ширина кнопки
 
 def main(page: ft.Page):
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
-    page.window.width = 650  # Ширина
+    page.window.width = 550  # Ширина
     page.window.height = 550  # Высота
     page.window.resizable = False
     logger.info(f"Program version: {program_version}. Date of change: {date_of_program_change}")
@@ -40,17 +44,17 @@ def main(page: ft.Page):
                                                      ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
                                                      url="https://t.me/master_tg_d", ), ], ),
                           ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                              ft.Row([ft.ElevatedButton(width=615, height=30, text="Подключение аккаунтов",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Подключение аккаунтов",
                                                         on_click=lambda _: page.go("/connecting_accounts")),
                                       ]),
-                              ft.Row([ft.ElevatedButton(width=615, height=30, text="Настройки",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Настройки",
                                                         on_click=lambda _: page.go("/settings")),
                                       ]),
 
-                              ft.Row([ft.ElevatedButton(width=615, height=30, text="Отправка жалоб",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Отправка жалоб",
                                                         on_click=lambda _: page.go("/submitting_complaints")),
                                       ]),
-                              ft.Row([ft.ElevatedButton(width=615, height=30, text="Документация",
+                              ft.Row([ft.ElevatedButton(width=line_width, height=30, text="Документация",
                                                         on_click=lambda _: page.go("/documentation")),
                                       ]),
 
@@ -58,7 +62,7 @@ def main(page: ft.Page):
         # ______________________________________________________________________________________________________________
         if page.route == "/connecting_accounts":  # Подключение аккаунтов
             try:
-                pass
+                await account_connection_menu(page)
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
