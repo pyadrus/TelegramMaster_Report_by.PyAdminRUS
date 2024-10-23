@@ -21,4 +21,5 @@ class ConfigReader:
             self.config.get('line_height', 'height_button', fallback=None)
         )
 
+
 config_reader = ConfigReader()

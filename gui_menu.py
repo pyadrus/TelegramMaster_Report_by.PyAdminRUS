@@ -2,8 +2,9 @@ import flet as ft
 
 from config import ConfigReader
 
-line_width = ConfigReader().get_line_width_button() # Ширина кнопки
-height_button = ConfigReader().get_line_width_button() # Высота кнопки
+line_width = ConfigReader().get_line_width_button()  # Ширина кнопки
+height_button = ConfigReader().get_line_width_button()  # Высота кнопки
+
 
 async def account_connection_menu(page):
     """Меню подключения аккаунтов"""
@@ -22,7 +23,8 @@ async def account_connection_menu(page):
 
                  ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
 
-                     ft.ElevatedButton(width=line_width, height=height_button, text="Подключение аккаунтов по номеру телефона",
+                     ft.ElevatedButton(width=line_width, height=height_button,
+                                       text="Подключение аккаунтов по номеру телефона",
                                        on_click=lambda _: page.go("/connecting_accounts_by_number")),
                      ft.ElevatedButton(width=line_width, height=height_button, text="Подключение session аккаунтов",
                                        on_click=lambda _: page.go("/connecting_accounts_by_session")),
