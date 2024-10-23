@@ -7,10 +7,10 @@ class ConfigReader:
 
     def __init__(self):
         self.config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config_gui.read('config_gui.ini')
+        self.config_gui.read('config/config_gui.ini')
 
         self.config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config.read('config.ini')
+        self.config.read('config/config.ini')
 
     def get_time_subscription(self):
         return (self.config.getint('time_subscription', 'time_subscription_1', fallback=None),
