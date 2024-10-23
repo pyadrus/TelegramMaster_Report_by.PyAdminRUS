@@ -15,7 +15,7 @@ from thefuzz import fuzz
 
 from auxiliary_functions import working_with_accounts, find_filess
 from checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
-from config import ConfigReader, height_button
+from config import height_button, api_id, api_hash
 from sqlite_working_tools import DatabaseHandler
 
 
@@ -23,10 +23,6 @@ class TGConnect:
 
     def __init__(self):
         self.db_handler = DatabaseHandler()
-        self.config_reader = ConfigReader()
-        self.api_id_api_hash = self.config_reader.get_api_id_data_api_hash_data()
-        self.api_id = self.api_id_api_hash[0]
-        self.api_hash = self.api_id_api_hash[1]
 
     async def connect_to_telegram(self, session_name, account_directory) -> TelegramClient:
         """
@@ -36,9 +32,9 @@ class TGConnect:
         :return TelegramClient: TelegramClient
         """
         try:
-            logger.info(f"Используем API ID: {self.api_id}, API Hash: {self.api_hash}")
-            telegram_client = TelegramClient(f"{account_directory}/{session_name}", api_id=self.api_id,
-                                             api_hash=self.api_hash,
+            logger.info(f"Используем API ID: {api_id}, API Hash: {api_hash}")
+            telegram_client = TelegramClient(f"{account_directory}/{session_name}", api_id=api_id,
+                                             api_hash=api_hash,
                                              system_version="4.16.30-vxCUSTOM",
                                              proxy=await reading_proxy_data_from_the_database(self.db_handler))
             return telegram_client
@@ -52,8 +48,7 @@ class TGConnect:
         :param folder_name: Папка с аккаунтами
         """
         try:
-            logger.info(
-                f"Проверка аккаунта {session_name}. Используем API ID: {self.api_id}, API Hash: {self.api_hash}")
+            logger.info(f"Проверка аккаунта {session_name}. Используем API ID: {api_id}, API Hash: {api_hash}")
             telegram_client = await self.get_telegram_client(session_name, f"user_settings/accounts/{folder_name}")
             try:
                 await telegram_client.connect()  # Подсоединяемся к Telegram аккаунта
@@ -184,7 +179,7 @@ class TGConnect:
                 logger.info(f"⚠️ Переименовываемый аккаунт: user_settings/accounts/{session_name}")
                 # Переименовывание аккаунтов
                 logger.info(
-                    f"Переименовывание аккаунта {session_name}. Используем API ID: {self.api_id}, API Hash: {self.api_hash}")
+                    f"Переименовывание аккаунта {session_name}. Используем API ID: {api_id}, API Hash: {api_hash}")
 
                 telegram_client = await self.get_telegram_client(session_name,
                                                                  account_directory=f"user_settings/accounts/{folder_name}")
@@ -272,8 +267,8 @@ class TGConnect:
                 # Дальнейшая обработка после записи номера телефона
                 proxy_settings = await reading_proxy_data_from_the_database(self.db_handler)  # Proxy IPV6 - НЕ РАБОТАЮТ
                 telegram_client = TelegramClient(f"user_settings/accounts/{account_directory}/{phone_number_value}",
-                                                 api_id=self.api_id,
-                                                 api_hash=self.api_hash,
+                                                 api_id=api_id,
+                                                 api_hash=api_hash,
                                                  system_version="4.16.30-vxCUSTOM", proxy=proxy_settings)
                 await telegram_client.connect()  # Подключаемся к Telegram
 

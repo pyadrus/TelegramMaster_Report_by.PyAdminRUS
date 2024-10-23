@@ -1,6 +1,7 @@
 import flet as ft
 from loguru import logger
 
+from TGConnect import TGConnect
 from config import (line_width, height_button, project_name, program_version, date_of_program_change, window_width,
                     window_height, window_resizable)
 from gui_menu import account_connection_menu
@@ -60,13 +61,13 @@ def main(page: ft.Page):
 
         elif page.route == "/connecting_accounts_by_number":  # Подключение аккаунтов по номеру телефона
             try:
-                pass
+                await TGConnect().connecting_number_accounts(page, 'report', 'жалоб')
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
         elif page.route == "/connecting_accounts_by_session":  # Подключение session аккаунтов
             try:
-                pass
+                await TGConnect().connecting_session_accounts(page, 'report', 'жалоб')
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
