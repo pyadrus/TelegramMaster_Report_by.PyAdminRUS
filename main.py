@@ -58,6 +58,19 @@ def main(page: ft.Page):
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
+        elif page.route == "/connecting_accounts_by_number":  # Подключение аккаунтов по номеру телефона
+            try:
+                pass
+            except Exception as e:
+                logger.exception(f"Ошибка: {e}")
+
+        elif page.route == "/connecting_accounts_by_session":  # Подключение session аккаунтов
+            try:
+                pass
+            except Exception as e:
+                logger.exception(f"Ошибка: {e}")
+
+        # ______________________________________________________________________________________________________________
         elif page.route == "/settings":  # Настройки
             try:
                 pass
