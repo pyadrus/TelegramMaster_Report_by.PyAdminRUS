@@ -1,9 +1,6 @@
 import flet as ft
 
-from config import ConfigReader
-
-line_width = ConfigReader().get_line_width_button()  # Ширина кнопки
-height_button = ConfigReader().get_line_width_button()  # Высота кнопки
+from config import line_width, height_button
 
 
 async def account_connection_menu(page):

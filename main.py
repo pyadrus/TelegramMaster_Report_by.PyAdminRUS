@@ -1,24 +1,18 @@
 import flet as ft
 from loguru import logger
 
-from config import ConfigReader
+from config import (line_width, height_button, project_name, program_version, date_of_program_change, window_width,
+                    window_height, window_resizable)
 from gui_menu import account_connection_menu
 
 logger.add("user_settings/log/log.log", rotation="2 MB", compression="zip")  # Логирование программы
 
-project_name = "TelegramMaster_Report_by.PyAdminRUS"
-program_version = "0.0.1"
-date_of_program_change = "21.10.2024"
-
-line_width = ConfigReader().get_line_width_button()  # Ширина кнопки
-height_button = ConfigReader().get_line_width_button()  # Высота кнопки
-
 
 def main(page: ft.Page):
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
-    page.window.width = 550  # Ширина
-    page.window.height = 550  # Высота
-    page.window.resizable = False
+    page.window.width = window_width  # Ширина
+    page.window.height = window_height  # Высота
+    page.window.resizable = window_resizable  # Разрешение изменения размера окна
     logger.info(f"Program version: {program_version}. Date of change: {date_of_program_change}")
 
     async def route_change(route):
@@ -46,20 +40,15 @@ def main(page: ft.Page):
                                                      ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
                                                      url="https://t.me/master_tg_d", ), ], ),
                           ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button,
-                                                        text="Подключение аккаунтов",
-                                                        on_click=lambda _: page.go("/connecting_accounts")),
-                                      ]),
-                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Настройки",
-                                                        on_click=lambda _: page.go("/settings")),
-                                      ]),
-
-                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Отправка жалоб",
-                                                        on_click=lambda _: page.go("/submitting_complaints")),
-                                      ]),
-                              ft.Row([ft.ElevatedButton(width=line_width, height=height_button, text="Документация",
-                                                        on_click=lambda _: page.go("/documentation")),
-                                      ]),
+                              ft.ElevatedButton(width=line_width, height=height_button,
+                                                text="Подключение аккаунтов",
+                                                on_click=lambda _: page.go("/connecting_accounts")),
+                              ft.ElevatedButton(width=line_width, height=height_button, text="Настройки",
+                                                on_click=lambda _: page.go("/settings")),
+                              ft.ElevatedButton(width=line_width, height=height_button, text="Отправка жалоб",
+                                                on_click=lambda _: page.go("/submitting_complaints")),
+                              ft.ElevatedButton(width=line_width, height=height_button, text="Документация",
+                                                on_click=lambda _: page.go("/documentation")),
 
                           ]), ]))
         # ______________________________________________________________________________________________________________
