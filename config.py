@@ -12,20 +12,8 @@ class ConfigReader:
         self.config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
         self.config.read('config/config.ini')
 
-    def get_time_subscription(self):
-        return (self.config.getint('time_subscription', 'time_subscription_1', fallback=None),
-                self.config.getint('time_subscription', 'time_subscription_2', fallback=None))
-
-    def get_time_inviting(self):
-        return (self.config.getint('time_inviting', 'time_inviting_1', fallback=None),
-                self.config.getint('time_inviting', 'time_inviting_2', fallback=None))
-
     def get_limits(self):
         return self.config.getint('account_limits', 'account_limits', fallback=None)
-
-    def get_time_activity_user(self):
-        return (self.config.getint('time_activity_user', 'time_activity_user_1', fallback=None),
-                self.config.getint('time_activity_user', 'time_activity_user_2', fallback=None))
 
     def get_time_sending_messages(self):
         return (self.config.getint('time_sending_messages', 'time_sending_messages_1', fallback=None),
