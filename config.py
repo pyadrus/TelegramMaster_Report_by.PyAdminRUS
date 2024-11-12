@@ -22,11 +22,15 @@ class ConfigReader:
                 self.config.getint('time_sending_messages', 'time_sending_messages_2', fallback=None))
 
     def get_api_id(self):
-        """Получение id telegram"""
+        """
+        Получение id telegram
+        """
         return self.config.get('telegram_settings', 'id', fallback=None)
 
     def get_api_hash(self):
-        """Получение hash telegram"""
+        """
+        Получение hash telegram
+        """
         return self.config.get('telegram_settings', 'hash', fallback=None)
 
     def get_hour_minutes_every_day(self):
@@ -34,35 +38,51 @@ class ConfigReader:
                 self.config.get('hour_minutes_every_day', 'minutes', fallback=None))
 
     def get_line_width_button(self):
-        """Получение ширины кнопки"""
+        """
+        Получение ширины кнопки
+        """
         return self.config_gui.get('line_width', 'line_width_button', fallback=None)
 
     def get_line_height_button(self):
-        """Получение высоты кнопки"""
+        """
+        Получение высоты кнопки
+        """
         return self.config_gui.get('line_height', 'height_button', fallback=None)
 
     def project_name(self):
-        """Наименование проекта"""
+        """
+        Наименование проекта
+        """
         return self.config_gui.get('project_name', 'project_name', fallback=None)
 
     def program_version(self):
-        """Версия программы"""
+        """
+        Версия программы
+        """
         return self.config_gui.get('program_version', 'program_version', fallback=None)
 
     def date_of_program_change(self):
-        """Дата обновления"""
+        """
+        Дата обновления
+        """
         return self.config_gui.get('date_of_program_change', 'date_of_program_change', fallback=None)
 
     def window_width(self):
-        """Ширина программы"""
+        """
+        Ширина программы
+        """
         return self.config_gui.get('window_width', 'window_width', fallback=None)
 
     def window_height(self):
-        """Высота программы"""
+        """
+        Высота программы
+        """
         return self.config_gui.get('window_height', 'window_height', fallback=None)
 
     def window_resizable(self):
-        """Разрешение на изменение размера программы, если False, то изменение запрещено"""
+        """
+        Разрешение на изменение размера программы, если False, то изменение запрещено
+        """
         return self.config_gui.get('window_resizable', 'window_resizable', fallback=None)
 
 

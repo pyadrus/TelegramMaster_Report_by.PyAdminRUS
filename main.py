@@ -10,6 +10,9 @@ logger.add("user_settings/log/log.log", rotation="2 MB", compression="zip")  # �
 
 
 def main(page: ft.Page):
+    """
+    Главное меню программы
+    """
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
