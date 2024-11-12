@@ -13,11 +13,13 @@ from telethon.errors import (AuthKeyDuplicatedError, PhoneNumberBannedError, Use
                              ApiIdInvalidError, YouBlockedUserError)
 from thefuzz import fuzz
 
-from auxiliary_functions import working_with_accounts, find_filess
+from auxiliary_functions import working_with_accounts
 from checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
 from config import height_button, api_id, api_hash
 from sqlite_working_tools import DatabaseHandler
 
+def find_filess():
+    pass
 
 class TGConnect:
 
