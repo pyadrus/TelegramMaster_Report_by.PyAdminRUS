@@ -16,6 +16,7 @@ def find_filess(directory_path, extension) -> list:
     :param extension: Расширение файла (указанное без точки)
     :return list: Список имен найденных файлов
     """
+
     entities = []  # Создаем словарь с именами найденных аккаунтов в папке user_settings/accounts
     for x in os.listdir(directory_path):
         if x.endswith(f".{extension}"):  # Проверяем, заканчивается ли имя файла на заданное расширение
