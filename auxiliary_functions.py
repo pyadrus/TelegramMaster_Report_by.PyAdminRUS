@@ -9,7 +9,7 @@ from loguru import logger
 from sqlite_working_tools import DatabaseHandler
 
 
-def find_filess(directory_path, extension) -> list:
+def find_files(directory_path, extension) -> list:
     """
     Поиск файлов с определенным расширением в директории. Расширение файла должно быть указанно без точки.
     :param directory_path: Путь к директории
@@ -43,8 +43,8 @@ def working_with_accounts(account_folder, new_account_folder) -> None:
             os.remove(account_folder)
     except PermissionError:
         logger.error("Не удалось перенести файлы в нужную папку")
-    except Exception as e:
-        logger.exception(f"Ошибка: {e}")
+    except Exception as error:
+        logger.exception(f"Ошибка: {error}")
 
 
 async def record_inviting_results(time_range_1: int, time_range_2: int, username: str) -> None:
@@ -58,10 +58,10 @@ async def record_inviting_results(time_range_1: int, time_range_2: int, username
     # Открываем базу с аккаунтами и с выставленными лимитами
     await DatabaseHandler().delete_row_db(table="members", column="username", value=username[0])
     # Смена username через случайное количество секунд
-    record_and_interrupt(time_range_1, time_range_2)
+    await record_and_interrupt(time_range_1, time_range_2)
 
 
-def record_and_interrupt(time_range_1, time_range_2) -> None:
+async def record_and_interrupt(time_range_1, time_range_2) -> None:
     """
     Запись данных в базу данных и прерывание выполнения кода.
     :param time_range_1:  - диапазон времени смены аккаунта
