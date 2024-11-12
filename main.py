@@ -1,12 +1,22 @@
 import flet as ft
 from loguru import logger
 
-from TGConnect import TGConnect
-from config import (line_width, height_button, project_name, program_version, date_of_program_change, window_width,
-                    window_height, window_resizable)
+from config import (
+    date_of_program_change,
+    height_button,
+    line_width,
+    program_version,
+    project_name,
+    window_height,
+    window_resizable,
+    window_width,
+)
 from gui_menu import account_connection_menu
+from TGConnect import TGConnect
 
-logger.add("user_settings/log/log.log", rotation="2 MB", compression="zip")  # Логирование программы
+logger.add(
+    "user_settings/log/log.log", rotation="2 MB", compression="zip"
+)  # Логирование программы
 
 
 def main(page: ft.Page):
@@ -20,38 +30,93 @@ def main(page: ft.Page):
         page.views.clear()
         # Меню "Главное меню"
         page.views.append(
-            ft.View("/", [ft.AppBar(title=ft.Text("Главное меню"),
-                                    bgcolor=ft.colors.SURFACE_VARIANT),
-                          ft.Text(spans=[ft.TextSpan(
-                              f"{project_name}",
-                              ft.TextStyle(
-                                  size=25,
-                                  weight=ft.FontWeight.BOLD,
-                                  foreground=ft.Paint(
-                                      gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.colors.PINK,
-                                                                                           ft.colors.PURPLE])), ), ), ], ),
-                          ft.Text(disabled=False,
-                                  spans=[ft.TextSpan('Аккаунт  Telegram: '),
-                                         ft.TextSpan("https://t.me/PyAdminRU",
-                                                     ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                                                     url="https://t.me/PyAdminRU", ), ], ),
-                          ft.Text(disabled=False,
-                                  spans=[ft.TextSpan("Канал Telegram: "),
-                                         ft.TextSpan("https://t.me/master_tg_d",
-                                                     ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                                                     url="https://t.me/master_tg_d", ), ], ),
-                          ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                              ft.ElevatedButton(width=line_width, height=height_button,
-                                                text="Подключение аккаунтов",
-                                                on_click=lambda _: page.go("/connecting_accounts")),
-                              ft.ElevatedButton(width=line_width, height=height_button, text="Настройки",
-                                                on_click=lambda _: page.go("/settings")),
-                              ft.ElevatedButton(width=line_width, height=height_button, text="Отправка жалоб",
-                                                on_click=lambda _: page.go("/submitting_complaints")),
-                              ft.ElevatedButton(width=line_width, height=height_button, text="Документация",
-                                                on_click=lambda _: page.go("/documentation")),
-
-                          ]), ]))
+            ft.View(
+                "/",
+                [
+                    ft.AppBar(title=ft.Text("Главное меню"), bgcolor=ft.colors.SURFACE_VARIANT),
+                    ft.Text(
+                        spans=[
+                            ft.TextSpan(
+                                f"{project_name}",
+                                ft.TextStyle(
+                                    size=25,
+                                    weight=ft.FontWeight.BOLD,
+                                    foreground=ft.Paint(
+                                        gradient=ft.PaintLinearGradient(
+                                            (0, 20), (150, 20), [ft.colors.PINK, ft.colors.PURPLE]
+                                        )
+                                    ),
+                                ),
+                            ),
+                        ],
+                    ),
+                    ft.Text(
+                        disabled=False,
+                        spans=[
+                            ft.TextSpan("Аккаунт  Telegram: "),
+                            ft.TextSpan(
+                                "https://t.me/PyAdminRU",
+                                ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                url="https://t.me/PyAdminRU",
+                            ),
+                        ],
+                    ),
+                    ft.Text(
+                        disabled=False,
+                        spans=[
+                            ft.TextSpan("Канал Telegram: "),
+                            ft.TextSpan(
+                                "https://t.me/master_tg_d",
+                                ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                url="https://t.me/master_tg_d",
+                            ),
+                        ],
+                    ),
+                    ft.Row(
+                        controls=[
+                            ft.Column(
+                                [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                                    ft.ElevatedButton(
+                                        width=line_width,
+                                        height=height_button,
+                                        text="Подключение аккаунтов",
+                                        on_click=lambda _: page.go("/connecting_accounts"),
+                                    ),
+                                    ft.ElevatedButton(
+                                        width=line_width,
+                                        height=height_button,
+                                        text="Настройки",
+                                        on_click=lambda _: page.go("/settings"),
+                                    ),
+                                    ft.ElevatedButton(
+                                        width=line_width,
+                                        height=height_button,
+                                        text="Отправка жалоб",
+                                        on_click=lambda _: page.go("/submitting_complaints"),
+                                    ),
+                                    ft.ElevatedButton(
+                                        width=line_width,
+                                        height=height_button,
+                                        text="Документация",
+                                        on_click=lambda _: page.go("/documentation"),
+                                    ),
+                                ]
+                            ),
+                            ft.Column(
+                                [
+                                    ft.ElevatedButton(
+                                        width=line_width,
+                                        height=height_button,
+                                        text="Подключение аккаунтов",
+                                        on_click=lambda _: page.go("/connecting_accounts"),
+                                    )
+                                ]
+                            ),
+                        ]
+                    ),
+                ],
+            )
+        )
         # ______________________________________________________________________________________________________________
         if page.route == "/connecting_accounts":  # Подключение аккаунтов
             try:
@@ -59,15 +124,17 @@ def main(page: ft.Page):
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
-        elif page.route == "/connecting_accounts_by_number":  # Подключение аккаунтов по номеру телефона
+        elif (
+            page.route == "/connecting_accounts_by_number"
+        ):  # Подключение аккаунтов по номеру телефона
             try:
-                await TGConnect().connecting_number_accounts(page, 'report', 'жалоб')
+                await TGConnect().connecting_number_accounts(page, "report", "жалоб")
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 
         elif page.route == "/connecting_accounts_by_session":  # Подключение session аккаунтов
             try:
-                await TGConnect().connecting_session_accounts(page, 'report', 'жалоб')
+                await TGConnect().connecting_session_accounts(page, "report", "жалоб")
             except Exception as e:
                 logger.exception(f"Ошибка: {e}")
 

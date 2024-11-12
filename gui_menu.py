@@ -1,6 +1,6 @@
 import flet as ft
 
-from config import line_width, height_button
+from config import height_button, line_width
 
 
 async def account_connection_menu(page):
