@@ -18,9 +18,6 @@ from checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_
 from config import height_button, api_id, api_hash
 from sqlite_working_tools import DatabaseHandler
 
-def find_filess():
-    pass
-
 class TGConnect:
 
     def __init__(self):
