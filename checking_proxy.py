@@ -12,6 +12,7 @@ async def reading_proxy_data_from_the_database(db_handler):
     Считываем данные для proxy c базы данных "software_database.db", таблица "proxy" где:
     proxy_type - тип proxy (например: SOCKS5), addr - адрес (например: 194.67.248.9), port - порт (например: 9795)
     username - логин (например: username), password - пароль (например: password)
+
     :param db_handler - объект класса DatabaseHandler
     """
     try:
@@ -23,8 +24,8 @@ async def reading_proxy_data_from_the_database(db_handler):
     except IndexError:
         proxy = None
         return proxy
-    except Exception as e:
-        logger.exception(f"Ошибка: {e}")
+    except Exception as error:
+        logger.exception(f"Ошибка: {error}")
 
 
 async def checking_the_proxy_for_work() -> None:
@@ -44,8 +45,8 @@ async def checking_the_proxy_for_work() -> None:
                                                         password=proxy_dic[4],  # Пароль (например: password)
                                                         rdns=proxy_dic[5],
                                                         db_handler=DatabaseHandler())
-    except Exception as e:
-        logger.exception(f"Ошибка: {e}")
+    except Exception as error:
+        logger.exception(f"Ошибка: {error}")
 
 
 async def connecting_to_proxy_with_verification(proxy_type, addr, port, username, password, rdns, db_handler) -> None:
@@ -53,6 +54,7 @@ async def connecting_to_proxy_with_verification(proxy_type, addr, port, username
     Подключение к proxy с проверкой на работоспособность где: proxy_type - тип proxy (например: SOCKS5),
     addr - адрес (например: 194.67.248.9), port - порт (например: 9795), username - логин (например: username),
     password - пароль (например: password)
+
     :param proxy_type: тип proxy (например: SOCKS5)
     :param addr: адрес (например: 194.67.248.9)
     :param port: порт (например: 9795)
@@ -72,5 +74,5 @@ async def connecting_to_proxy_with_verification(proxy_type, addr, port, username
     except requests.exceptions.RequestException:
         logger.info('[-] Proxy не рабочий!')
         await db_handler.deleting_an_invalid_proxy(proxy_type, addr, port, username, password, rdns)
-    except Exception as e:
-        logger.exception(f"Ошибка: {e}")
+    except Exception as error:
+        logger.exception(f"Ошибка: {error}")

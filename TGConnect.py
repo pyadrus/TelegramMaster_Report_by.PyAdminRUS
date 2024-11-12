@@ -13,10 +13,11 @@ from telethon.errors import (AuthKeyDuplicatedError, PhoneNumberBannedError, Use
                              ApiIdInvalidError, YouBlockedUserError)
 from thefuzz import fuzz
 
-from auxiliary_functions import working_with_accounts
+from auxiliary_functions import working_with_accounts, find_files
 from checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
 from config import height_button, api_id, api_hash
 from sqlite_working_tools import DatabaseHandler
+
 
 class TGConnect:
 
@@ -26,6 +27,7 @@ class TGConnect:
     async def connect_to_telegram(self, session_name, account_directory) -> TelegramClient:
         """
         Создает клиент для подключения к Telegram. Proxy IPV6 - НЕ РАБОТАЮТ.
+
         :param session_name: Имя сессии
         :param account_directory: Путь к директории
         :return TelegramClient: TelegramClient
@@ -37,12 +39,13 @@ class TGConnect:
                                              system_version="4.16.30-vxCUSTOM",
                                              proxy=await reading_proxy_data_from_the_database(self.db_handler))
             return telegram_client
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def verify_account(self, folder_name, session_name) -> None:
         """
         Проверяет и сортирует аккаунты.
+
         :param session_name: Имя аккаунта для проверки аккаунта
         :param folder_name: Папка с аккаунтами
         """
@@ -62,15 +65,15 @@ class TGConnect:
             except (PhoneNumberBannedError, UserDeactivatedBanError, AuthKeyNotFound,
                     AuthKeyUnregisteredError, AuthKeyDuplicatedError) as e:
                 await self.handle_banned_account(telegram_client, folder_name, session_name, e)
-            except TimedOutError as e:
-                logger.exception(f"Ошибка таймаута: {e}")
+            except TimedOutError as error:
+                logger.exception(f"Ошибка таймаута: {error}")
                 time.sleep(2)
             except sqlite3.OperationalError:
                 await telegram_client.disconnect()
                 working_with_accounts(f"user_settings/accounts/{folder_name}/{session_name}.session",
                                       f"user_settings/accounts/banned/{session_name}.session")
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def handle_banned_account(self, telegram_client, folder_name, session_name, exception):
         """
@@ -78,6 +81,7 @@ class TGConnect:
         telegram_client.disconnect() - Отключение от Telegram.
         working_with_accounts() - Перемещение файла. Исходный путь к файлу - account_folder. Путь к новой папке,
         куда нужно переместить файл - new_account_folder
+
         :param telegram_client: TelegramClient
         :param folder_name: Папка с аккаунтами
         :param session_name: Имя аккаунта
@@ -91,11 +95,12 @@ class TGConnect:
     async def check_for_spam(self, folder_name) -> None:
         """
         Проверка аккаунта на спам через @SpamBot
+
         :param folder_name: папка с аккаунтами
         """
         try:
-            for session_name in find_filess(directory_path=f"user_settings/accounts/{folder_name}",
-                                            extension='session'):
+            for session_name in find_files(directory_path=f"user_settings/accounts/{folder_name}",
+                                           extension='session'):
                 telegram_client = await self.get_telegram_client(session_name,
                                                                  account_directory=f"user_settings/accounts/{folder_name}")
                 try:
@@ -140,41 +145,43 @@ class TGConnect:
                         await telegram_client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                 except YouBlockedUserError:
                     continue  # Записываем ошибку в software_database.db и продолжаем работу
-                except (AttributeError, AuthKeyUnregisteredError) as e:
-                    logger.error(e)
+                except (AttributeError, AuthKeyUnregisteredError) as error:
+                    logger.error(error)
                     continue
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def verify_all_accounts(self, folder_name) -> None:
         """
         Проверяет все аккаунты Telegram в указанной директории.
+
         :folder_name: Имя каталога с аккаунтами
         """
         try:
             logger.info(f"Запуск проверки аккаунтов Telegram из папки 📁: {folder_name}")
             await checking_the_proxy_for_work()  # Проверка proxy
             # Сканирование каталога с аккаунтами
-            for session_file in find_filess(directory_path=f"user_settings/accounts/{folder_name}",
-                                            extension='session'):
+            for session_file in find_files(directory_path=f"user_settings/accounts/{folder_name}",
+                                           extension='session'):
                 logger.info(f"⚠️ Проверяемый аккаунт: user_settings/accounts/{session_file}")
                 # Проверка аккаунтов
                 await self.verify_account(folder_name=folder_name, session_name=session_file)
             logger.info(f"Окончание проверки аккаунтов Telegram из папки 📁: {folder_name}")
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def get_account_details(self, folder_name):
         """
         Получает информацию о Telegram аккаунте.
+
         :param folder_name: Имя каталога
         """
         try:
             logger.info(f"Запуск переименования аккаунтов Telegram из папки 📁: {folder_name}")
             await checking_the_proxy_for_work()  # Проверка proxy
             # Сканирование каталога с аккаунтами
-            for session_name in find_filess(directory_path=f"user_settings/accounts/{folder_name}",
-                                            extension='session'):
+            for session_name in find_files(directory_path=f"user_settings/accounts/{folder_name}",
+                                           extension='session'):
                 logger.info(f"⚠️ Переименовываемый аккаунт: user_settings/accounts/{session_name}")
                 # Переименовывание аккаунтов
                 logger.info(
@@ -200,12 +207,13 @@ class TGConnect:
                         f"⛔ Битый файл или аккаунт забанен: {session_name}.session. Возможно, запущен под другим IP")
                     working_with_accounts(f"user_settings/accounts/{folder_name}/{session_name}.session",
                                           f"user_settings/accounts/banned/{session_name}.session")
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def rename_session_file(self, telegram_client, phone_old, phone, folder_name) -> None:
         """
         Переименовывает session файлы.
+
         :param telegram_client: Клиент для работы с Telegram
         :param phone_old: Номер телефона для переименования
         :param phone: Номер телефона для переименования (новое название для session файла)
@@ -219,13 +227,14 @@ class TGConnect:
         except FileExistsError:
             # Если файл существует, то удаляем дубликат
             os.remove(f"user_settings/accounts/{folder_name}/{phone_old}.session")
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def get_telegram_client(self, session_name, account_directory):
         """
         Подключение к Telegram, используя файл session.
         Имя файла сессии file[0] - session файл
+
         :param account_directory: Путь к директории
         :param session_name: Файл сессии (file[0] - session файл)
         :return TelegramClient: TelegramClient
@@ -241,12 +250,13 @@ class TGConnect:
             logger.info(f"На данный момент аккаунт {session_name} запущен под другим ip")
             working_with_accounts(f"{account_directory}/{session_name}.session",
                                   f"user_settings/accounts/banned/{session_name}.session")
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def connecting_number_accounts(self, page: ft.Page, account_directory, appointment):
         """
         Account telegram connect, с проверкой на валидность, если ранее не было соединения, то запрашиваем код
+
         :param page: Page
         :param account_directory: Папка с аккаунтами
         :param appointment: Назначение аккаунта
@@ -259,7 +269,7 @@ class TGConnect:
 
             phone_number = ft.TextField(label="Введите номер телефона:", multiline=False, max_lines=1)
 
-            async def btn_click(e) -> None:
+            async def btn_click(_) -> None:
                 phone_number_value = phone_number.value
                 logger.info(f"Номер телефона: {phone_number_value}")
 
@@ -278,7 +288,7 @@ class TGConnect:
 
                     passww = ft.TextField(label="Введите код telegram:", multiline=True, max_lines=1)
 
-                    async def btn_click_code(e) -> None:
+                    async def btn_click_code(_) -> None:
                         try:
                             logger.info(f"Код telegram: {passww.value}")
                             await telegram_client.sign_in(phone_number_value, passww.value)  # Авторизация с кодом
@@ -290,7 +300,7 @@ class TGConnect:
                             logger.info("Требуется двухфакторная аутентификация. Введите пароль.")
                             pass_2fa = ft.TextField(label="Введите пароль telegram:", multiline=False, max_lines=1)
 
-                            async def btn_click_password(e) -> None:
+                            async def btn_click_password(_) -> None:
                                 logger.info(f"Пароль telegram: {pass_2fa.value}")
                                 try:
                                     await telegram_client.sign_in(password=pass_2fa.value)
@@ -299,8 +309,8 @@ class TGConnect:
                                     page.go(
                                         "/connecting_accounts_by_number")  # Изменение маршрута в представлении существующих настроек
                                     page.update()
-                                except Exception as ex:
-                                    logger.error(f"Ошибка при вводе пароля: {ex}")
+                                except Exception as error:
+                                    logger.error(f"Ошибка при вводе пароля: {error}")
 
                             button_password = ft.ElevatedButton("Готово", on_click=btn_click_password)
                             page.views.append(ft.View(controls=[pass_2fa, button_password]))
@@ -309,8 +319,8 @@ class TGConnect:
                         except ApiIdInvalidError:
                             logger.error("[!] Неверные API ID или API Hash.")
                             await telegram_client.disconnect()  # Отключаемся от Telegram
-                        except Exception as ex:
-                            logger.error(f"Ошибка при авторизации: {ex}")
+                        except Exception as error:
+                            logger.error(f"Ошибка при авторизации: {error}")
                             await telegram_client.disconnect()  # Отключаемся от Telegram
 
                     button_code = ft.ElevatedButton("Готово", on_click=btn_click_code)
@@ -319,8 +329,10 @@ class TGConnect:
 
                 page.update()
 
-            async def back_button_clicked(e):
-                """Кнопка возврата в меню настроек"""
+            async def back_button_clicked(_):
+                """
+                Кнопка возврата в меню настроек
+                """
                 page.go("/connecting_accounts_by_number")
 
             button = ft.ElevatedButton(width=550, height=height_button, text="Готово", on_click=btn_click)
@@ -333,12 +345,13 @@ class TGConnect:
             page.views.append(input_view)  # Добавляем созданный вид на страницу
             page.update()
 
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")
 
     async def connecting_session_accounts(self, page: ft.Page, account_directory, appointment):
         """
         Подключение сессии Telegram
+
         :param page: страница
         :param account_directory: директория аккаунтов
         :param appointment: назначение
@@ -351,8 +364,7 @@ class TGConnect:
                                   # color="pink600"
                                   )
 
-            # Поле для отображения выбранного файла
-            selected_files = ft.Text(value="Session файл не выбран", size=12)
+            selected_files = ft.Text(value="Session файл не выбран", size=12)  # Поле для отображения выбранного файла
 
             async def btn_click(e: ft.FilePickerResultEvent) -> None:
                 """Обработка выбора файла"""
@@ -383,8 +395,10 @@ class TGConnect:
                 selected_files.update()
                 page.update()
 
-            async def back_button_clicked(e):
-                """Кнопка возврата в меню настроек"""
+            async def back_button_clicked(_):
+                """
+                Кнопка возврата в меню настроек
+                """
                 page.go("/connecting_accounts_by_session")
 
             pick_files_dialog = ft.FilePicker(on_result=btn_click)  # Инициализация выбора файлов
@@ -413,5 +427,5 @@ class TGConnect:
             page.views.append(input_view)  # Добавляем созданный вид на страницу
             page.update()
 
-        except Exception as e:
-            logger.exception(f"Ошибка: {e}")
+        except Exception as error:
+            logger.exception(f"Ошибка: {error}")

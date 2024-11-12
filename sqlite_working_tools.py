@@ -9,17 +9,22 @@ class DatabaseHandler:
         self.db_file = db_file
 
     async def connect(self) -> None:
-        """Подключение к базе данных"""
+        """
+        Подключение к базе данных
+        """
         self.sqlite_connection = sqlite3.connect(self.db_file)
         self.cursor = self.sqlite_connection.cursor()
 
     def close(self) -> None:
-        """Закрытие соединения с базой данных"""
+        """
+        Закрытие соединения с базой данных
+        """
         self.sqlite_connection.close()
 
     async def open_and_read_data(self, table_name) -> list:
         """
         Открываем базу и считываем данные из указанной таблицы
+
         :param table_name: название таблицы
         :return: список записей из таблицы"""
         await self.connect()
@@ -35,6 +40,7 @@ class DatabaseHandler:
         идентификатором каждой записи в таблице members. Данный запрос сначала выбирает минимальное значение rowid для
         каждой записи в поле id. Затем он удаляет все записи, у которых rowid не равен минимальному значению.
         Это позволяет оставить только уникальные значения в поле id.
+
         :param table_name: Имя таблицы
         :param column_name: имя столбца
         """
@@ -48,6 +54,7 @@ class DatabaseHandler:
         """
         Открытие базы данных для inviting (рассылка сообщений) c лимитами. Если number_of_accounts равно None,
         возвращаем весь список
+
         :param table_name: имя таблицы
         :param account_limit: количество аккаунтов
         :return list: полученный список
@@ -66,6 +73,7 @@ class DatabaseHandler:
     async def write_parsed_chat_participants_to_db_active(self, entities) -> None:
         """
         Запись результатов parsing участников чата
+
         :param entities: список результатов parsing
         """
         await self.connect()
@@ -81,6 +89,7 @@ class DatabaseHandler:
     async def write_data_to_db(self, creating_a_table, writing_data_to_a_table, entities) -> None:
         """
         Запись действий аккаунта в базу данных
+
         :param creating_a_table: создание таблицы
         :param writing_data_to_a_table: запись данных в таблицу
         :param entities: список записей в таблице
@@ -98,6 +107,7 @@ class DatabaseHandler:
     async def write_parsed_chat_participants_to_db(self, entities) -> None:
         """
         Запись результатов parsing участников чата
+
         :param entities: список результатов parsing
         """
         await self.connect()
@@ -113,6 +123,7 @@ class DatabaseHandler:
     async def deleting_an_invalid_proxy(self, proxy_type, addr, port, username, password, rdns) -> None:
         """
         Удаляем не рабочий proxy с software_database.db, таблица proxy
+
         :param proxy_type: тип proxy
         :param addr: адрес
         :param port: порт
@@ -132,6 +143,7 @@ class DatabaseHandler:
     async def delete_row_db(self, table, column, value) -> None:
         """
         Удаляет строку из таблицы
+
         :param table: имя таблицы
         :param column: имя колонки
         :param value: значение
@@ -156,7 +168,9 @@ class DatabaseHandler:
         self.close()  # cursor_members.close() – закрытие соединения с БД.
 
     async def write_to_single_column_table(self, name_database, database_columns, into_columns, recorded_data) -> None:
-        """Запись данных в таблицу с одной колонкой в базу данных
+        """
+        Запись данных в таблицу с одной колонкой в базу данных
+
         :param name_database: название таблицы
         :param database_columns: название колон
         :param into_columns: название колонки в таблице

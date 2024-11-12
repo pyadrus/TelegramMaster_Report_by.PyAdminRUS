@@ -10,6 +10,9 @@ logger.add("user_settings/log/log.log", rotation="2 MB", compression="zip")  # �
 
 
 def main(page: ft.Page):
+    """
+    Главное меню программы
+    """
     page.title = f"{project_name}: {program_version} (Дата изменения {date_of_program_change})"
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
@@ -56,39 +59,39 @@ def main(page: ft.Page):
         if page.route == "/connecting_accounts":  # Подключение аккаунтов
             try:
                 await account_connection_menu(page)
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         elif page.route == "/connecting_accounts_by_number":  # Подключение аккаунтов по номеру телефона
             try:
                 await TGConnect().connecting_number_accounts(page, 'report', 'жалоб')
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         elif page.route == "/connecting_accounts_by_session":  # Подключение session аккаунтов
             try:
                 await TGConnect().connecting_session_accounts(page, 'report', 'жалоб')
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         # ______________________________________________________________________________________________________________
         elif page.route == "/settings":  # Настройки
             try:
                 pass
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         elif page.route == "/submitting_complaints":  # Отправка жалоб
             try:
                 pass
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         elif page.route == "/documentation":  # ДокумЫЫЫентация
             try:
                 pass
-            except Exception as e:
-                logger.exception(f"Ошибка: {e}")
+            except Exception as error:
+                logger.exception(f"Ошибка: {error}")
 
         page.update()
 
