@@ -3,7 +3,9 @@ import configparser
 
 
 class ConfigReader:
-    """Конфиг файл для gui программы"""
+    """
+    Конфиг файл для gui программы
+    """
 
     def __init__(self):
         self.config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)

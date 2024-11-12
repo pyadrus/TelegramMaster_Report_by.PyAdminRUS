@@ -4,7 +4,11 @@ from config import line_width, height_button
 
 
 async def account_connection_menu(page):
-    """Меню подключения аккаунтов"""
+    """
+    Меню подключения аккаунтов
+    :param page
+    :return None
+    """
     page.views.append(
         ft.View("/account_connection_menu",
                 [ft.AppBar(title=ft.Text("Главное меню"),
