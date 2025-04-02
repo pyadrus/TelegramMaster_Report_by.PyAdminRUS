@@ -28,6 +28,7 @@ def find_files(directory_path, extension) -> list:
 
     return entities  # Возвращаем список json файлов
 
+
 def working_with_accounts(account_folder, new_account_folder) -> None:
     """
     Работа с аккаунтами
